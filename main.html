@@ -9,6 +9,7 @@
   clevertap.account.push({ "id": "6Z8-875-R85Z" }, "us1");
   clevertap.privacy.push({ optOut: false }); // true if the user opts out of sharing data
   clevertap.privacy.push({ useIP: true });   // true if the user agrees to share IP data
+  clevertap.setLogLevel(3)
   (function () {
     var wzrk = document.createElement('script');
     wzrk.type = 'text/javascript';
