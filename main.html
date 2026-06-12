@@ -2,18 +2,20 @@
 <html lang="en">
 <head>
 <script type="text/javascript">
-     var clevertap = {event:[], profile:[], account:[], onUserLogin:[], notifications:[], privacy:[]};
- // replace with the CLEVERTAP_ACCOUNT_ID with the actual ACCOUNT ID value from your Dashboard -> Settings page
-clevertap.account.push({ "id": "6Z8-875-R85Z" }, "us1", "Target_Domain");
-clevertap.privacy.push({optOut: false}); //set the flag to true, if the user of the device opts out of sharing their data
-clevertap.privacy.push({useIP: true}); //set the flag to true, if the user agrees to share their IP data
- (function () {
-     var wzrk = document.createElement('script');
-     wzrk.type = 'text/javascript';
-     wzrk.async = true;
-     wzrk.src = ('https:' == document.location.protocol ? 'https://d2r1yp2w7bby2u.cloudfront.net' : 'http://static.clevertap.com') + '/js/clevertap.min.js';
-     var s = document.getElementsByTagName('script')[0];
-     s.parentNode.insertBefore(wzrk, s);
+  // ---- CleverTap Web SDK init (must run in <head>, before the rest of the page) ----
+  var clevertap = { event: [], profile: [], account: [], onUserLogin: [], notifications: [], privacy: [] };
+  // Account ID from Dashboard -> Settings. Second arg is the region. (Target domain
+  // is optional and omitted so the SDK uses the correct default for the region.)
+  clevertap.account.push({ "id": "6Z8-875-R85Z" }, "us1");
+  clevertap.privacy.push({ optOut: false }); // true if the user opts out of sharing data
+  clevertap.privacy.push({ useIP: true });   // true if the user agrees to share IP data
+  (function () {
+    var wzrk = document.createElement('script');
+    wzrk.type = 'text/javascript';
+    wzrk.async = true;
+    wzrk.src = ('https:' == document.location.protocol ? 'https://d2r1yp2w7bby2u.cloudfront.net' : 'http://static.clevertap.com') + '/js/clevertap.min.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wzrk, s);
   })();
 </script>
 <meta charset="UTF-8" />
@@ -60,15 +62,8 @@ clevertap.privacy.push({useIP: true}); //set the flag to true, if the user agree
     padding: 22px;
     box-shadow: 0 1px 2px rgba(17,17,58,0.04);
   }
-  .config {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr auto;
-    gap: 12px;
-    align-items: end;
-    margin-bottom: 18px;
-  }
   label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
-  input, select {
+  input {
     width: 100%;
     padding: 11px 12px;
     border: 1px solid var(--line);
@@ -77,7 +72,7 @@ clevertap.privacy.push({useIP: true}); //set the flag to true, if the user agree
     background: #fff;
     color: var(--ink);
   }
-  input:focus, select:focus { outline: none; border-color: var(--terra); box-shadow: 0 0 0 3px rgba(232,93,61,0.12); }
+  input:focus { outline: none; border-color: var(--terra); box-shadow: 0 0 0 3px rgba(232,93,61,0.12); }
 
   button {
     cursor: pointer;
@@ -90,15 +85,8 @@ clevertap.privacy.push({useIP: true}); //set the flag to true, if the user agree
   }
   .btn-primary { background: var(--terra); color: #fff; }
   .btn-primary:hover { background: var(--terra-dark); }
-  .btn-dark { background: var(--navy); color: #fff; }
-  .btn-dark:hover { background: var(--navy-soft); }
   .btn-ghost { background: #fff; color: var(--navy); border: 1px solid var(--line); }
   .btn-ghost:hover { background: #f7f8fc; }
-  button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  .status { font-size: 13px; margin-top: 10px; display: flex; align-items: center; gap: 8px; color: var(--muted); }
-  .dot { width: 9px; height: 9px; border-radius: 50%; background: #c7ccd8; }
-  .dot.live { background: var(--ok); }
 
   .auth-shell { margin-top: 18px; }
   .field { margin-bottom: 14px; }
@@ -133,33 +121,14 @@ clevertap.privacy.push({useIP: true}); //set the flag to true, if the user agree
 
   .row-actions { display: flex; gap: 10px; margin-top: 8px; }
   .err { color: var(--off); font-size: 13px; margin-top: 6px; min-height: 16px; }
-
-  .log-card { margin-top: 22px; }
-  .log-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .log-head h2 { font-size: 14px; margin: 0; color: var(--navy); }
-  .log-head button { padding: 6px 12px; font-size: 12px; }
-  .log {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 12.5px; background: #0f1020; color: #d7dcea; border-radius: 10px;
-    padding: 14px; max-height: 320px; overflow-y: auto;
-  }
-  .log .line { padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
-  .log .line:last-child { border-bottom: none; }
-  .log .t { color: #6f7796; }
-  .log .call { color: #ffd08a; font-weight: 600; }
-  .log .pay { color: #8fd3a6; white-space: pre-wrap; word-break: break-word; }
-  .log .empty { color: #6f7796; }
   .hidden { display: none; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <h1>CleverTap Login &amp; Subscription Demo</h1>
-    <p>Login records an <code>onUserLogin</code> + <code>Login</code> event. The subscription toggle pushes <code>MSG-email</code>. Logout records a <code>Logout</code> event.</p>
+    <h1>EcoStore</h1>
   </header>
-
-  <div class="status" style="margin-bottom:18px;"><span class="dot" id="sdkDot"></span><span id="sdkStatus">Initializing CleverTap SDK…</span></div>
 
   <!-- AUTH -->
   <div class="auth-shell">
@@ -171,7 +140,7 @@ clevertap.privacy.push({useIP: true}); //set the flag to true, if the user agree
       </div>
       <div class="field">
         <label for="password">Password</label>
-        <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
+        <input id="password" type="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" autocomplete="current-password" />
       </div>
       <div class="err" id="loginErr"></div>
       <button id="loginBtn" class="btn-primary" style="width:100%;">Log in</button>
@@ -198,77 +167,45 @@ clevertap.privacy.push({useIP: true}); //set the flag to true, if the user agree
       </div>
     </div>
   </div>
-
-  <!-- ACTIVITY LOG -->
-  <div class="card log-card">
-    <div class="log-head">
-      <h2>CleverTap activity log</h2>
-      <button class="btn-ghost" id="clearLog">Clear</button>
-    </div>
-    <div class="log" id="log"><div class="line empty">Waiting for SDK calls…</div></div>
-  </div>
 </div>
 
 <script>
-  // ---- Define the CleverTap queue object up-front (standard snippet pattern) ----
-  // Pushes made before the script loads are queued and flushed once it's ready.
-  window.clevertap = { event: [], profile: [], account: [], onUserLogin: [], notifications: [], privacy: [] };
-
-  var sdkReady = false;
+  // The SDK is initialized in <head>; this script only wires up the UI and SDK calls.
   var currentEmail = null;
 
-  // Catch errors thrown *inside* clevertap.min.js (common in restricted
-  // sandbox/preview iframes where storage & page context are limited).
-  // This keeps the demo usable; it does NOT hide errors from this page's code.
+  // Lightweight logger -> browser console (the on-page activity log was removed).
+  function log(call, payload) {
+    if (payload !== undefined) console.log('[CleverTap]', call, payload);
+    else console.log('[CleverTap]', call);
+  }
+
+  // Suppress errors thrown *inside* clevertap.min.js in restricted/sandbox contexts
+  // so they don't break the page. Does NOT hide errors from this page's own code.
   window.addEventListener('error', function (e) {
     if (e && e.filename && e.filename.indexOf('clevertap') !== -1) {
-      try { log('CleverTap SDK notice (suppressed)', { message: e.message }); } catch (_) {}
+      log('CleverTap SDK notice (suppressed)', { message: e.message });
       e.preventDefault();
       return true;
     }
   });
 
-  // ---------- Activity log helpers ----------
-  var logEl = document.getElementById('log');
-  function stamp() {
-    var d = new Date();
-    return d.toLocaleTimeString([], { hour12: false }) + '.' + String(d.getMilliseconds()).padStart(3, '0');
-  }
-  function log(call, payload) {
-    var empty = logEl.querySelector('.empty');
-    if (empty) empty.remove();
-    var line = document.createElement('div');
-    line.className = 'line';
-    var body = '<span class="t">' + stamp() + '</span> <span class="call">' + call + '</span>';
-    if (payload !== undefined) {
-      body += '<div class="pay">' + JSON.stringify(payload, null, 2) + '</div>';
-    }
-    line.innerHTML = body;
-    logEl.appendChild(line);
-    logEl.scrollTop = logEl.scrollHeight;
-  }
-  document.getElementById('clearLog').addEventListener('click', function () {
-    logEl.innerHTML = '<div class="line empty">Cleared.</div>';
-  });
-
-  // Read & log the CleverTap ID once the SDK has generated/restored it.
-  // getCleverTapID() may return a string or a Promise depending on SDK version,
-  // and is populated asynchronously, so we poll briefly.
+  // Read & log the CleverTap ID once the head-initialized SDK has generated/restored it.
+  // getCleverTapID() may return a string or a Promise depending on SDK version and is
+  // populated asynchronously, so we poll briefly.
   function logCleverTapID(attempt) {
     attempt = attempt || 1;
     var retry = function () {
-      if (attempt < 12) {
+      if (attempt < 15) {
         setTimeout(function () { logCleverTapID(attempt + 1); }, 400);
       } else {
-        log('CleverTap ID unavailable', { note: 'SDK loaded but ID not ready (expected when the CDN/storage is blocked in the preview sandbox)' });
+        log('CleverTap ID unavailable', { note: 'SDK not ready (expected when the CDN/storage is blocked in a preview sandbox)' });
       }
     };
     try {
       if (!window.clevertap || typeof window.clevertap.getCleverTapID !== 'function') { retry(); return; }
       var res = window.clevertap.getCleverTapID();
       if (res && typeof res.then === 'function') {
-        res.then(function (id) { id ? log('CleverTap ID', { ctId: id }) : retry(); })
-           .catch(function () { retry(); });
+        res.then(function (id) { id ? log('CleverTap ID', { ctId: id }) : retry(); }).catch(retry);
       } else if (res) {
         log('CleverTap ID', { ctId: res });
       } else {
@@ -276,55 +213,7 @@ clevertap.privacy.push({useIP: true}); //set the flag to true, if the user agree
       }
     } catch (e) { retry(); }
   }
-
-  // ---------- SDK init ----------
-  function initCleverTap(accountId, region) {
-    //window.clevertap.account.push({ id: accountId, region: region });
-    //window.clevertap.privacy.push({ optOut: false });
-    //window.clevertap.privacy.push({ useIP: false });
-    //window.clevertap.spa = true; // single-page-app mode
-
-    var onLoaded = function (src) {
-      sdkReady = true;
-      setStatus(true, 'SDK loaded for account ' + accountId + ' (' + region + ').');
-      log('clevertap.min.js loaded', { account: accountId, region: region, src: src });
-      logCleverTapID();
-    };
-
-    var primary = 'https://d2r1yp2w7bby2u.cloudfront.net/js/clevertap.min.js';
-    var fallback = 'https://cdn.jsdelivr.net/npm/clevertap-web-sdk/clevertap.min.js';
-
-    var loadScript = function (src, onerror) {
-      var s = document.createElement('script');
-      s.type = 'text/javascript';
-      s.async = true;
-      s.src = src;
-      s.onload = function () { onLoaded(src); };
-      s.onerror = onerror;
-      document.head.appendChild(s);
-    };
-
-    loadScript(primary, function () {
-      log('Primary CDN unreachable — trying jsDelivr fallback', { blocked: primary });
-      loadScript(fallback, function () {
-        // Not an Account ID problem: the .js file is the same for every account.
-        // In the Claude artifact preview this is the sandbox CSP blocking the CDN;
-        // the queued calls flush automatically once served from a real https origin.
-        setStatus(false, 'Couldn\u2019t load clevertap.min.js from either CDN \u2014 likely the preview sandbox CSP. Host on https to load it. Calls remain queued.');
-      });
-    });
-  }
-
-  function setStatus(live, msg) {
-    document.getElementById('sdkDot').className = 'dot' + (live ? ' live' : '');
-    document.getElementById('sdkStatus').textContent = msg;
-  }
-
-  // ---- Auto-initialize on page load with fixed credentials ----
-  var CT_ACCOUNT_ID = '6Z8-875-R85Z';
-  var CT_REGION = 'us1';
-  setStatus(false, 'Initializing CleverTap SDK for ' + CT_ACCOUNT_ID + ' (' + CT_REGION + ')…');
-  initCleverTap(CT_ACCOUNT_ID, CT_REGION);
+  logCleverTapID();
 
   // ---------- View switching ----------
   function showLogin() {
@@ -334,6 +223,14 @@ clevertap.privacy.push({useIP: true}); //set the flag to true, if the user agree
   function showSub() {
     document.getElementById('loginView').classList.add('hidden');
     document.getElementById('subView').classList.remove('hidden');
+  }
+
+  // ---------- Subscription pill helper ----------
+  var toggle = document.getElementById('subToggle');
+  function syncPill() {
+    var pill = document.getElementById('subPill');
+    if (toggle.checked) { pill.textContent = 'ON'; pill.className = 'pill on'; }
+    else { pill.textContent = 'OFF'; pill.className = 'pill off'; }
   }
 
   // ---------- LOGIN ----------
@@ -378,12 +275,6 @@ clevertap.privacy.push({useIP: true}); //set the flag to true, if the user agree
   });
 
   // ---------- SUBSCRIPTION TOGGLE ----------
-  var toggle = document.getElementById('subToggle');
-  function syncPill() {
-    var pill = document.getElementById('subPill');
-    if (toggle.checked) { pill.textContent = 'ON'; pill.className = 'pill on'; }
-    else { pill.textContent = 'OFF'; pill.className = 'pill off'; }
-  }
   toggle.addEventListener('change', function () {
     syncPill();
     // Push MSG-email ON/OFF based on the customer's choice.
